@@ -1,8 +1,6 @@
 import streamlit as st
 import pandas as pd
 import altair as alt
-from wordcloud import WordCloud
-import matplotlib.pyplot as plt
 
 # Page Configuration
 st.set_page_config(
@@ -15,7 +13,7 @@ st.set_page_config(
 @st.cache_data
 def load_data():
     try:
-        df = pd.read_csv('Datasets/my_data2 (1).csv')
+        df = pd.read_csv('my_data2.csv')
     except FileNotFoundError:
         return None
 
@@ -125,54 +123,9 @@ with col_chart2:
 
 st.divider()
 
-# Row 3: Word Clouds
-st.subheader("☁️ What are they saying?")
-
-if len(filtered_df) > 0:
-    wc_col1, wc_col2 = st.columns(2)
-
-    def plot_wordcloud(text_data, title, colormap):
-        if text_data.empty:
-            return
-        text = " ".join(text_data.astype(str))
-        
-        wc = WordCloud(width=800, height=400, background_color='white', colormap=colormap).generate(text)
-        
-        fig, ax = plt.subplots(figsize=(10, 5))
-        
-        # FIX: Convert to standard image first to avoid NumPy/WordCloud version crash
-        ax.imshow(wc.to_image(), interpolation='bilinear')
-        
-        ax.axis('off')
-        ax.set_title(title, fontsize=20)
-        return fig
-
-    with wc_col1:
-        st.markdown("**Positive Vibes** (Top words in +1)")
-        pos_text = filtered_df[filtered_df['label'] == 1]['review_content']
-        if not pos_text.empty:
-            fig = plot_wordcloud(pos_text, "Positive Words", 'Greens')
-            st.pyplot(fig)
-        else:
-            st.info("No positive reviews in current selection.")
-
-    with wc_col2:
-        st.markdown("**Negative Issues** (Top words in -1)")
-        neg_text = filtered_df[filtered_df['label'] == -1]['review_content']
-        if not neg_text.empty:
-            fig = plot_wordcloud(neg_text, "Negative Words", 'Reds')
-            st.pyplot(fig)
-        else:
-            st.info("No negative reviews in current selection.")
-else:
-    st.warning("No data matches your filters.")
-
-st.divider()
-
-# Row 4: Data Explorer
+# Row 3: Data Explorer
 st.subheader("📝 Review Explorer")
 
-# FIX: Use updated parameter for newer Streamlit versions
 st.dataframe(
     filtered_df[['sentiment_label', 'language', 'review_content', 'length']].head(100),
     use_container_width=True
