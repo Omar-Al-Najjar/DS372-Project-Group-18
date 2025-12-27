@@ -15,7 +15,7 @@ st.set_page_config(
 @st.cache_data
 def load_data():
     try:
-    df = pd.read_csv('Datasets/my_data2 (1).csv')
+        df = pd.read_csv('Datasets/my_data2 (1).csv')
     except FileNotFoundError:
         return None
 
@@ -176,5 +176,4 @@ st.subheader("📝 Review Explorer")
 st.dataframe(
     filtered_df[['sentiment_label', 'language', 'review_content', 'length']].head(100),
     use_container_width=True
-
 )
