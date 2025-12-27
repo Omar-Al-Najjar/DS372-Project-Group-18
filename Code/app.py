@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import altair as alt
 
+
 # Page Configuration
 st.set_page_config(
     page_title="The Sentiment Scope",
@@ -13,7 +14,7 @@ st.set_page_config(
 @st.cache_data
 def load_data():
     try:
-        df = pd.read_csv('my_data2 (1).csv')
+        df = pd.read_csv('Datasets/my_data2 (1).csv')
     except FileNotFoundError:
         return None
 
@@ -130,4 +131,5 @@ st.dataframe(
     filtered_df[['sentiment_label', 'language', 'review_content', 'length']].head(100),
     use_container_width=True
 )
+
 
